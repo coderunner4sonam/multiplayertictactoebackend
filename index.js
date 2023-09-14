@@ -5,6 +5,7 @@ const { Server } = require('socket.io');
 const server = http.createServer(app);
 const cors = require('cors');
 app.use(cors());
+// https://multiplaertictactoe.vercel.app
 
 const io = new Server(server, {
   cors: {
@@ -15,30 +16,13 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
   console.log(socket.id);
+  const ConnectionList = ["board", "currentPlayer", "length", "winner", "Drawn", "SocketID", "RoomID", "GameStart", "CreatedId"];
 
-  socket.on("board", (data) => {
-    socket.broadcast.emit("board", data);
-  });
-
-  socket.on("currentPlayer", (data) => {
-    socket.broadcast.emit("currentPlayer", data);
-  });
-
-  socket.on("length", (data) => {
-    socket.broadcast.emit("length", data);
-  });
-
-  socket.on("winner", (data) => {
-    socket.broadcast.emit("winner", data);
-  });
-
-  socket.on("Drawn", (data) => {
-    socket.broadcast.emit("Drawn", data);
-  });
-
-  socket.on("SocketID", (data) => {
-    socket.broadcast.emit("SocketID", data);
-  });
+  ConnectionList.map((connection)=>(
+    socket.on(connection,(data) => {
+      socket.broadcast.emit(connection, data);
+    })
+  ))
 });
 
 const PORT = 8000;
